@@ -1,13 +1,17 @@
 package com.example.demo.model;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "beer")
 public class Beer implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "id")
     private int id;
     @Column(name = "name")
@@ -128,4 +132,5 @@ public class Beer implements Serializable {
     public void setPhoto(Long photo) {
         this.photo = photo;
     }
+
 }

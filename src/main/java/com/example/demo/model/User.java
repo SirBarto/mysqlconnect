@@ -1,29 +1,40 @@
 package com.example.demo.model;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
-@Table(name="user")
-public class User implements Serializable/*extends org.apache.tomcat.jni.User*/ {
+@Table(name = "user")
+public class User implements Serializable {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "id")
     private int id;
 
-    @Column(name = "login") private String login;
+    @Column(name = "login")
+    private String login;
 
-    @Column(name = "password") private String password;
+    @Column(name = "password")
+    private String password;
 
-    @Column(name = "name") private String name;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "last_name") private String last_name;
+    @Column(name = "last_name")
+    private String last_name;
 
-    @Column(name = "permission") private boolean permission;
+    @Column(name = "permission")
+    private boolean permission;
 
-    @Column(name = "email") private String email;
+    @Column(name = "email")
+    private String email;
 
-    @Column(name ="avatar")private Long avatar;
+    @Column(name = "avatar")
+    private Long avatar;
 
     public int getId() {
         return id;
@@ -88,4 +99,5 @@ public class User implements Serializable/*extends org.apache.tomcat.jni.User*/ 
     public void setAvatar(Long avatar) {
         this.avatar = avatar;
     }
+
 }
