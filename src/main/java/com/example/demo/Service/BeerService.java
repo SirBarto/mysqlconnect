@@ -11,13 +11,17 @@ import java.util.List;
 @Service
 public class BeerService implements IBeerService {
 
-    @Autowired
+    final
     BeerRepository beerRepository;
+
+    @Autowired
+    public BeerService(BeerRepository beerRepository) {
+        this.beerRepository = beerRepository;
+    }
 
     @Override
     public Beer getBeerById(int id) {
-        Beer obj = beerRepository.findById(id).get();
-        return obj;
+        return beerRepository.findById(id).get();
     }
 
     @Override
@@ -38,7 +42,7 @@ public class BeerService implements IBeerService {
     @Override
     public List<Beer> getAllBeers() {
         List<Beer> list = new ArrayList<>();
-        beerRepository.findAll().forEach(e -> list.add(e));
+        beerRepository.findAll().forEach(list::add);
         return list;
     }
 

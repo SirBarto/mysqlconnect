@@ -22,17 +22,17 @@ public class CommentService implements ICommentService{
 
     @Override
     public void addNewComment(Comment comment) {
-
+        commentRepository.save(comment);
     }
 
     @Override
     public void updateComment(Comment comment) {
-
+        commentRepository.save(comment);
     }
 
     @Override
     public void deleteComment(int id) {
-
+        commentRepository.delete(getCommentById(id));
     }
 
     @Override

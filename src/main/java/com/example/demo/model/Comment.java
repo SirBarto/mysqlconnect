@@ -12,8 +12,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "comment")
-@JsonIgnoreProperties(value = {"createdAt"}, allowGetters = true)
-public class Comment implements Serializable {
+public class Comment extends DateModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -25,12 +24,12 @@ public class Comment implements Serializable {
 
     @Column(name = "rating")
     private double rating;
-
+/*
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "createdAt")
+    @Column(name = "createdat",nullable = false,updatable = false)
     @CreatedDate
-    private Date createdAt;
-
+    private Date createdat;
+*/
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_user", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -70,13 +69,6 @@ public class Comment implements Serializable {
         this.rating = rating;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
 
     public User getIdUser() {
         return idUser;

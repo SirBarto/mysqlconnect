@@ -12,6 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RestController
@@ -44,5 +45,21 @@ public class CommentController {
     public ResponseEntity<List<Comment>> getAllComments() {
         List<Comment> list = commentService.getAllComments();
         return new ResponseEntity<List<Comment>>(list, HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/comment/remove/{id}")
+    public ResponseEntity<Void> deleteComment(@PathVariable("id") int id) {
+        commentService.deleteComment(id);
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping(path = "/comment/update/{id}")
+    public ResponseEntity<Comment> updateComment(@RequestBody Comment comment, @PathVariable int id) {
+        Optional<Comment> commentOptional = commentRepository.findById(id);
+        if (!commentOptional.isPresent())
+            return ResponseEntity.notFound().build();
+        comment.setId(id);
+        commentRepository.save(comment);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -60,5 +60,4 @@ public class BeerController {
         beerRepository.save(beer);
         return ResponseEntity.noContent().build();
     }
-
 }

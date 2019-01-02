@@ -34,7 +34,6 @@ public class UserService implements IUserService {
          userRepository.save(user);
     }
 
-
     @Override
     public void updateUser(User user) {
         userRepository.save(user);
@@ -48,7 +47,7 @@ public class UserService implements IUserService {
     @Override
     public List<User> getAllUsers() {
         List<User> list = new ArrayList<>();
-        userRepository.findAll().forEach(e -> list.add(e));
+        userRepository.findAll().forEach(list::add);
         return list;
     }
 
