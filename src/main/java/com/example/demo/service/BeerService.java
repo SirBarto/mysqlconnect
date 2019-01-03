@@ -1,4 +1,4 @@
-package com.example.demo.Service;
+package com.example.demo.service;
 
 import com.example.demo.model.Beer;
 import com.example.demo.repository.BeerRepository;
@@ -20,7 +20,7 @@ public class BeerService implements IBeerService {
     }
 
     @Override
-    public Beer getBeerById(int id) {
+    public Beer getBeerById(Long id) {
         return beerRepository.findById(id).get();
     }
 
@@ -35,7 +35,7 @@ public class BeerService implements IBeerService {
     }
 
     @Override
-    public void deleteBeer(int id) {
+    public void deleteBeer(Long id) {
         beerRepository.delete(getBeerById(id));
     }
 
@@ -45,5 +45,7 @@ public class BeerService implements IBeerService {
         beerRepository.findAll().forEach(list::add);
         return list;
     }
+
+
 
 }

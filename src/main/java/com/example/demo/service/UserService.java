@@ -1,4 +1,4 @@
-package com.example.demo.Service;
+package com.example.demo.service;
 
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
@@ -14,9 +14,8 @@ public class UserService implements IUserService {
     private UserRepository userRepository;
 
     @Override
-    public User getUserById(int id) {
-        User obj = userRepository.findById(id).get();
-        return obj;
+    public User getUserById(Long id) {
+        return userRepository.findById(id).get();
     }
 
     //TODO addUser component
@@ -40,7 +39,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void deleteUser(int id) {
+    public void deleteUser(Long id) {
         userRepository.delete(getUserById(id));
     }
 

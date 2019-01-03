@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.Service.UserService;
+import com.example.demo.service.UserService;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/user/{id}")
-    public ResponseEntity<User> getUser(@PathVariable("id") int id) {
+    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
         User n = userService.getUserById(id);
         return new ResponseEntity<User>(n, HttpStatus.OK);
     }
@@ -56,13 +56,13 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/user/remove/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") int id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping(path = "/user/update/{id}")
-    public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable int id) {
+    @PatchMapping(path = "/user/update/{id}")
+    public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable Long id) {
         Optional<User> userOptional = userRepository.findById(id);
         if (!userOptional.isPresent())
             return ResponseEntity.notFound().build();

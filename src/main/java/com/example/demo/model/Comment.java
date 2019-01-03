@@ -1,14 +1,11 @@
 package com.example.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.data.annotation.CreatedDate;
-import java.util.Date;
+
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "comment")
@@ -17,39 +14,34 @@ public class Comment extends DateModel {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "id")
-    private int id;
+    private Long id;
 
     @Column(name = "text")
     private String text;
 
     @Column(name = "rating")
     private double rating;
-/*
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "createdat",nullable = false,updatable = false)
-    @CreatedDate
-    private Date createdat;
-*/
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_user", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private User idUser;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_beer", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private Beer idBeer;
+    private User userId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "beer_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private Beer beerId;
 
     @Column(name = "photos")
     private Long photos;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -69,21 +61,20 @@ public class Comment extends DateModel {
         this.rating = rating;
     }
 
-
-    public User getIdUser() {
-        return idUser;
+    public User getUserId() {
+        return userId;
     }
 
-    public void setIdUser(User idUser) {
-        this.idUser = idUser;
+    public void setUserId(User userId) {
+        this.userId = userId;
     }
 
-    public Beer getIdBeer() {
-        return idBeer;
+    public Beer getBeerId() {
+        return beerId;
     }
 
-    public void setIdBeer(Beer idBeer) {
-        this.idBeer = idBeer;
+    public void setBeerId(Beer beerId) {
+        this.beerId = beerId;
     }
 
     public Long getPhotos() {

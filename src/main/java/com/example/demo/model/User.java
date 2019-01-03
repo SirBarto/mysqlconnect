@@ -13,7 +13,7 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "id")
-    private int id;
+    private Long id;
 
     @Column(name = "login")
     private String login;
@@ -36,11 +36,11 @@ public class User implements Serializable {
     @Column(name = "avatar")
     private Long avatar;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

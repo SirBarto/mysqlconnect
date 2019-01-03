@@ -1,20 +1,21 @@
 package com.example.demo.controller;
 
-import com.example.demo.Service.CommentService;
+import com.example.demo.model.Beer;
 import com.example.demo.model.Comment;
+import com.example.demo.repository.BeerRepository;
 import com.example.demo.repository.CommentRepository;
+import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
-import java.util.List;
+import javax.validation.Valid;
 import java.util.Optional;
 
-@Controller
+
 @RestController
 @RequestMapping(path = "/demo")
 public class CommentController {
@@ -22,6 +23,60 @@ public class CommentController {
     @Autowired
     CommentRepository commentRepository;
 
+    @Autowired
+    BeerRepository beerRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @GetMapping("/beer/{beerId}/comments")
+    public Page<Comment> getAllCommentsByBeerId(@PathVariable(value = "beerId") Long beerId, Pageable pageable) {
+        Optional<Beer> optionalBeer = beerRepository.findById(beerId);
+        if (optionalBeer.isPresent()) {
+            return commentRepository.findByBeerId(optionalBeer.get(), pageable);
+        }
+        return null;
+    }
+
+    @PostMapping("/beer/{beerId}/comments")
+    public Comment createComment(@PathVariable(value = "beerId") Long beerId,
+                                 @Valid @RequestBody Comment comment) {
+        return beerRepository.findById(beerId).map(post -> {
+            comment.setBeerId(post);
+            return commentRepository.save(comment);
+        }).orElseThrow(() -> new ResourceNotFoundException("BeerId " + beerId + " not found"));
+    }
+
+    @PatchMapping(path = "/beer/{beerId}/comments/{comId}")
+    public Comment updateComment(@PathVariable(value = "beerId") Long beerId,
+                                 @PathVariable(value = "comId") Long comId,
+                                 @Valid @RequestBody Comment comment) {
+        if (!beerRepository.existsById(beerId)) {
+            throw new ResourceNotFoundException("BeerId" + beerId + " not found");
+        }
+
+        return commentRepository.findById(comId).map(comments -> {
+            comments.setText(comment.getText());
+            comments.setRating(comment.getRating());
+            return commentRepository.save(comments);
+        }).orElseThrow(() -> new ResourceNotFoundException("CommentId" + comId + " not found"));
+    }
+
+    @DeleteMapping(path = "/beer/{beerId}/comments/{comId}")
+    public ResponseEntity<?> deleteComment(@PathVariable("beerId") Long beerId,
+                                           @PathVariable(value = "comId") Long comId) {
+        if (!beerRepository.existsById(beerId)) {
+            throw new ResourceNotFoundException("BeerId" + beerId + " not found");
+        }
+
+        return commentRepository.findById(comId).map(comment -> {
+            commentRepository.delete(comment);
+            return ResponseEntity.ok().build();
+        }).orElseThrow(() -> new ResourceNotFoundException("CommentId " + comId + " not found"));
+    }
+
+
+/*
     @Autowired
     CommentService commentService;
 
@@ -35,9 +90,9 @@ public class CommentController {
         return ResponseEntity.created(location).build();
     }
 
-    @GetMapping(path = "/comment{id}")
+    @GetMapping(path = "/beer/{id}/comment")
     public ResponseEntity<Comment> getComment(@PathVariable("id") int id) {
-        Comment n = commentService.getCommentById(id);
+        Comment n = commentService.getCommentByBeerId(id);
         return new ResponseEntity<Comment>(n, HttpStatus.OK);
     }
 
@@ -62,4 +117,16 @@ public class CommentController {
         commentRepository.save(comment);
         return ResponseEntity.noContent().build();
     }
+    */
+
+/* to je dobre
+    @PostMapping("/beer/{beerId}/comments")
+    public Comment createComment(@PathVariable(value = "beerId") Long beerId,
+                                 @Valid @RequestBody Comment comment) {
+        return beerRepository.findById(beerId).map(post -> {
+            comment.setBeerId(post);
+            return commentRepository.save(comment);
+        }).orElseThrow(() -> new ResourceNotFoundException("BeerId " + beerId + " not found"));
+    }
+ */
 }

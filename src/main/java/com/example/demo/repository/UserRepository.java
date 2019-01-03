@@ -2,13 +2,14 @@ package com.example.demo.repository;
 
 
 import com.example.demo.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import retrofit2.http.Query;
 
 import java.util.List;
 
-public interface UserRepository extends CrudRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Long> {
 //queries in this place
    // List<User> findById(int id);
    // List<User> findDistinctByCategory(String category);
