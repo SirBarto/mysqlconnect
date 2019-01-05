@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Beer;
 import com.example.demo.repository.BeerRepository;
+import com.example.demo.repository.CommentRepository;
 import com.example.demo.service.BeerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,9 @@ public class BeerController {
 
     @Autowired
     BeerService beerService;
+
+    @Autowired
+    CommentRepository commentRepository;
 
     @PostMapping(path = "/beer/add")
     public ResponseEntity<Void> addNewBeer(@RequestBody Beer beer) {

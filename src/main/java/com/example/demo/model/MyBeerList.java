@@ -14,41 +14,41 @@ public class MyBeerList extends DateModel {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "id")
-    private int id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "idbeer", nullable = false)
+    @JoinColumn(name = "beer_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private Beer idBeer;
+    private Beer beerId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "iduser", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private User idUser;
+    private User userId;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Beer getIdBeer() {
-        return idBeer;
+    public Beer getBeerId() {
+        return beerId;
     }
 
-    public void setIdBeer(Beer idBeer) {
-        this.idBeer = idBeer;
+    public void setBeerId(Beer beerId) {
+        this.beerId = beerId;
     }
 
-    public User getIdUser() {
-        return idUser;
+    public User getUserId() {
+        return userId;
     }
 
-    public void setIdUser(User idUser) {
-        this.idUser = idUser;
+    public void setUserId(User userId) {
+        this.userId = userId;
     }
 }

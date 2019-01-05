@@ -1,20 +1,22 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.MyBeerList;
+import com.example.demo.model.User;
+import com.example.demo.repository.BeerRepository;
 import com.example.demo.repository.MyBeerListRepository;
-import com.example.demo.service.MyBeerListService;
+import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
-import java.util.List;
+import javax.validation.Valid;
 import java.util.Optional;
 
-@Controller
+//import com.example.demo.service.MyBeerListService;
+
 @RestController
 @RequestMapping(path = "/demo")
 public class MyBeerListController {
@@ -23,8 +25,58 @@ public class MyBeerListController {
     MyBeerListRepository myBeerListRepository;
 
     @Autowired
-    MyBeerListService myBeerListService;
+    BeerRepository beerRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
+    @GetMapping("/user/{userId}/best")
+    public Page<MyBeerList> getAllFavouriteBeerByUserId(@PathVariable(value = "userId") Long userId, Pageable pageable) {
+        Optional<User> optionalMyBeerList = userRepository.findById(userId);
+        beerRepository.findAll();
+        if (optionalMyBeerList.isPresent()) {
+            return myBeerListRepository.findByUserId(optionalMyBeerList.get(), pageable);
+        }
+        return null;
+    }
+
+    @PostMapping("/user/{userId}/best/{beerId}")
+    public MyBeerList addBestBeer(@PathVariable(value = "userId") Long userId,
+                                  @PathVariable(value = "beerId") Long beerId,
+                                  @Valid @RequestBody MyBeerList myBeerList) {
+
+        return userRepository.findById(userId).map(user -> {
+            myBeerList.setUserId(user);
+            myBeerList.setBeerId(beerRepository.findById(beerId).get());
+            return myBeerListRepository.save(myBeerList);
+        }).orElseThrow(() -> new ResourceNotFoundException("BeerId " + beerId + " not found"));
+    }
+
+    private MyBeerList getMyBeerListById(Long id) {
+        return myBeerListRepository.findById(id).get();
+    }
+
+    private void deleteBeerFromMyList(Long id) {
+        myBeerListRepository.delete(getMyBeerListById(id));
+    }
+
+    @DeleteMapping("/user/{userId}/best/{beerId}")
+    public ResponseEntity<?> deleteBeerFromList(@PathVariable("userId") Long userId,
+                                                @PathVariable("beerId") Long beerId) {
+        if (!userRepository.existsById(userId)) {
+            throw new ResourceNotFoundException("UserId " + userId + " not found");
+        }
+
+        return myBeerListRepository.findById(beerId).map(myBeerList -> {
+            myBeerListRepository.delete(myBeerList);
+            return ResponseEntity.ok().build();
+        }).orElseThrow(() -> new ResourceNotFoundException("BestBeer with id " + beerId + " not found"));
+    }
+
+}
+
+
+/*
     @PostMapping(path = "/mylist/add")
     public ResponseEntity<Void> addNewBeerToMyList(@RequestBody MyBeerList myBeerList) {
         MyBeerList savedBeerOnList = myBeerListRepository.save(myBeerList);
@@ -62,4 +114,4 @@ public class MyBeerListController {
         myBeerListRepository.save(myBeerList);
         return ResponseEntity.noContent().build();
     }
-}
+    */

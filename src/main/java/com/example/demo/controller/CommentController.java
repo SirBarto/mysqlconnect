@@ -32,27 +32,45 @@ public class CommentController {
     @GetMapping("/beer/{beerId}/comments")
     public Page<Comment> getAllCommentsByBeerId(@PathVariable(value = "beerId") Long beerId, Pageable pageable) {
         Optional<Beer> optionalBeer = beerRepository.findById(beerId);
+        userRepository.findAll();
         if (optionalBeer.isPresent()) {
             return commentRepository.findByBeerId(optionalBeer.get(), pageable);
         }
         return null;
     }
 
-    @PostMapping("/beer/{beerId}/comments")
+    /*to działa !! version bez polaczenia z tabela user
+        @PostMapping("/beer/{beerId}/comments")
+        public Comment createComment(@PathVariable(value = "beerId") Long beerId,
+                                     @Valid @RequestBody Comment comment) {
+            return beerRepository.findById(beerId).map(post -> {
+                comment.setBeerId(post);
+                return commentRepository.save(comment);
+            }).orElseThrow(() -> new ResourceNotFoundException("BeerId " + beerId + " not found"));
+        }
+    */
+    @PostMapping("/beer/{beerId}/user/{userId}/comments")
     public Comment createComment(@PathVariable(value = "beerId") Long beerId,
+                                 @PathVariable(value = "userId") Long userId,
                                  @Valid @RequestBody Comment comment) {
-        return beerRepository.findById(beerId).map(post -> {
-            comment.setBeerId(post);
+        return beerRepository.findById(beerId).map(beer -> {
+            comment.setBeerId(beer);
+            comment.setUserId(userRepository.findById(userId).get());
             return commentRepository.save(comment);
         }).orElseThrow(() -> new ResourceNotFoundException("BeerId " + beerId + " not found"));
     }
 
-    @PatchMapping(path = "/beer/{beerId}/comments/{comId}")
+    @PatchMapping(path = "/beer/{beerId}/user/{userId}/comments/{comId}")
     public Comment updateComment(@PathVariable(value = "beerId") Long beerId,
+                                 @PathVariable(value = "userId") Long userId,
                                  @PathVariable(value = "comId") Long comId,
                                  @Valid @RequestBody Comment comment) {
         if (!beerRepository.existsById(beerId)) {
             throw new ResourceNotFoundException("BeerId" + beerId + " not found");
+        }
+
+        if (!userRepository.existsById(userId)) {
+            throw new ResourceNotFoundException("UserId" + userId + " not found");
         }
 
         return commentRepository.findById(comId).map(comments -> {
@@ -127,6 +145,21 @@ public class CommentController {
             comment.setBeerId(post);
             return commentRepository.save(comment);
         }).orElseThrow(() -> new ResourceNotFoundException("BeerId " + beerId + " not found"));
+    }
+
+    @PatchMapping(path = "/beer/{beerId}/comments/{comId}")
+    public Comment updateComment(@PathVariable(value = "beerId") Long beerId,
+                                 @PathVariable(value = "comId") Long comId,
+                                 @Valid @RequestBody Comment comment) {
+        if (!beerRepository.existsById(beerId)) {
+            throw new ResourceNotFoundException("BeerId" + beerId + " not found");
+        }
+
+        return commentRepository.findById(comId).map(comments -> {
+            comments.setText(comment.getText());
+            comments.setRating(comment.getRating());
+            return commentRepository.save(comments);
+        }).orElseThrow(() -> new ResourceNotFoundException("CommentId" + comId + " not found"));
     }
  */
 }
