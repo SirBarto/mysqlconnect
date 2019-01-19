@@ -12,29 +12,14 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    @Column(name = "id")
-    private Long id;
-
-    @Column(name = "login")
-    private String login;
-
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "last_name")
-    private String last_name;
-
-    @Column(name = "permission")
-    private boolean permission;
-
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "avatar")
-    private Long avatar;
+    @Column(name = "id") private Long id;
+    @Column(name = "login") private String login;
+    @Column(name = "password") private String password;
+    @Column(name = "name") private String name;
+    @Column(name = "last_name") private String last_name;
+    @Column(name = "permission") private boolean permission;
+    @Column(name = "email") private String email;
+    @Column(name = "avatar") private Long avatar;
 
     public Long getId() {
         return id;

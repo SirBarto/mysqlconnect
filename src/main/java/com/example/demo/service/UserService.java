@@ -18,16 +18,6 @@ public class UserService implements IUserService {
         return userRepository.findById(id).get();
     }
 
-    //TODO addUser component
-   /* @Override
-    public boolean addUser(User user) {
-        List<User> list = userRepository
-        if (list.size() > 0) {
-            return false;
-        } else {
-            userRepository.save(user);
-            return true;
-    }*/
     @Override
     public void addNewUser(User user) {
          userRepository.save(user);
@@ -50,4 +40,8 @@ public class UserService implements IUserService {
         return list;
     }
 
+
+    public User loginUserService(String login, String password){
+        return userRepository.findByLoginAndPassword(login,password);
+    }
 }

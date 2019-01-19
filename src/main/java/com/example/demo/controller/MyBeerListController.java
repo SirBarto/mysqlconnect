@@ -56,10 +56,6 @@ public class MyBeerListController {
         return myBeerListRepository.findById(id).get();
     }
 
-    private void deleteBeerFromMyList(Long id) {
-        myBeerListRepository.delete(getMyBeerListById(id));
-    }
-
     @DeleteMapping("/user/{userId}/best/{beerId}")
     public ResponseEntity<?> deleteBeerFromList(@PathVariable("userId") Long userId,
                                                 @PathVariable("beerId") Long beerId) {

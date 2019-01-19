@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.service.UserService;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,29 +17,19 @@ import java.util.Optional;
 @Controller
 @RequestMapping(path = "/demo", method = RequestMethod.GET)
 public class UserController {
+
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private UserService userService;
 
-    /*
-        @GetMapping(path = "/add")
-        public @ResponseBody String addNewUser(@RequestParam String name, @RequestParam String email){
-            User n = new User();
-            n.setName(name);
-            n.setEmail(email);
-            userRepository.save(n);
-            return "201";
-        }
-    */
     @PostMapping(path = "/user/add")
-    public ResponseEntity<Void> addNewUser(@RequestBody User user) {
+    public @ResponseBody
+    ResponseEntity<Void> addNewUser(User user) {
         User savedUser = userRepository.save(user);
-
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedUser.getId()).toUri();
-
         return ResponseEntity.created(location).build();
     }
 
@@ -71,5 +61,29 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+/*
+    @GetMapping(path = "/user/login/")
+    public ResponseEntity loginUser(
+            @RequestBody User user) {
+
+
+        return new ResponseEntity("18",HttpStatus.OK);
+    }
+*/
 
 }
+
+
+
+
+
+    /*
+        @GetMapping(path = "/add")
+        public @ResponseBody String addNewUser(@RequestParam String name, @RequestParam String email){
+            User n = new User();
+            n.setName(name);
+            n.setEmail(email);
+            userRepository.save(n);
+            return "201";
+        }
+    */

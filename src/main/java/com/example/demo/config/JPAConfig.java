@@ -1,4 +1,4 @@
-package com.example.demo.config;
+/*package com.example.demo.config;
 
 import org.omg.CORBA.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.Properties;
 @EnableJpaRepositories("com.example.demo.repository")
 //@PropertySource("classpath:database.properties")
 public class JPAConfig {
-   /*
+
     @Autowired
     private Environment env;
     @Bean(name = "entityManagerFactory")
@@ -50,5 +50,5 @@ public class JPAConfig {
     }
 
     private Properties jpaProperties() {
-    }*/
-}
+    }
+}*/

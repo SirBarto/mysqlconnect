@@ -9,6 +9,4 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface MyBeerListRepository extends JpaRepository<MyBeerList,Long> {
     Page<MyBeerList> findByUserId(User userId, Pageable pageable);
-    Page<MyBeerList> findMyBeerListById(MyBeerList myBeerListId, Pageable pageable);
-   // Page<MyBeerList> findMyBeerListById(MyBeerList myBeerListId);
 }

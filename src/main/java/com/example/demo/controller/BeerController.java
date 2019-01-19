@@ -29,7 +29,8 @@ public class BeerController {
     CommentRepository commentRepository;
 
     @PostMapping(path = "/beer/add")
-    public ResponseEntity<Void> addNewBeer(@RequestBody Beer beer) {
+    public @ResponseBody
+    ResponseEntity<Void> addNewBeer(Beer beer) {
         Beer savedBeer = beerRepository.save(beer);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
